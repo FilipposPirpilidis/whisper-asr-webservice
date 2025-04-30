@@ -143,12 +143,5 @@ async def detect_language(
 def start(host: str, port: Optional[int] = None):
     uvicorn.run(app, host=host, port=port)
 
-def verify_token(authorization: str = Header(...)):
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid auth header format")
-    token = authorization[7:]  # Remove "Bearer "
-    if token != API_TOKEN:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
-
 if __name__ == "__main__":
     start()
