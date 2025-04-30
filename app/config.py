@@ -8,6 +8,7 @@ class CONFIG:
     Configuration class for ASR models.
     Reads environment variables for runtime configuration, with sensible defaults.
     """
+    API_TOKEN = os.getenv("API_TOKEN", "test-token")
     # Determine the ASR engine ('faster_whisper', 'openai_whisper' or 'whisperx')
     ASR_ENGINE = os.getenv("ASR_ENGINE", "openai_whisper")
 
