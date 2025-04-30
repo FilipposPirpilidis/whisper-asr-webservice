@@ -16,6 +16,7 @@ from app.config import CONFIG
 from app.factory.asr_model_factory import ASRModelFactory
 from app.utils import load_audio
 
+API_TOKEN = "test-token"  # Ideally from environment/config
 asr_model = ASRModelFactory.create_asr_model()
 asr_model.load_model()
 
@@ -87,6 +88,7 @@ async def asr(
         include_in_schema=(True if CONFIG.ASR_ENGINE == "whisperx" else False),
     ),
     output: Union[str, None] = Query(default="txt", enum=["txt", "vtt", "srt", "tsv", "json"]),
+    token_check: None = Depends(verify_token),
 ):
     result = asr_model.transcribe(
         load_audio(audio_file.file, encode),
@@ -140,6 +142,12 @@ async def detect_language(
 def start(host: str, port: Optional[int] = None):
     uvicorn.run(app, host=host, port=port)
 
+def verify_token(authorization: str = Header(...)):
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid auth header format")
+    token = authorization[7:]  # Remove "Bearer "
+    if token != API_TOKEN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid token")
 
 if __name__ == "__main__":
     start()
