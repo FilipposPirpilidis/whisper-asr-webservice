@@ -17,7 +17,6 @@ from app.config import CONFIG
 from app.factory.asr_model_factory import ASRModelFactory
 from app.utils import load_audio
 
-API_TOKEN = "test-token"  # Ideally from environment/config
 asr_model = ASRModelFactory.create_asr_model()
 asr_model.load_model()
 
