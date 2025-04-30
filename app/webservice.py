@@ -7,6 +7,7 @@ from urllib.parse import quote
 import click
 import uvicorn
 from fastapi import FastAPI, File, Query, UploadFile, applications, Depends
+from app.dependencies.auth import verify_token
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import RedirectResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
